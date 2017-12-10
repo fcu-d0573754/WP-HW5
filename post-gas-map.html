@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GOOGLE MAP</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+
+    var posts=[
+        ['post1',24.1761,120.6491,"台中市西屯區河南路2段268號"],
+        ['post2',24.1775,120.6375,"台中市西屯區黎明路三段130號"],
+        ['post3',24.1655,120.6542,"台中市西屯區青海路一段83號"],
+
+    ];
+
+    var gaslocs=[
+      ['gas1',24.1731,120.6456,"台中市西屯區河南路二段341號"],
+      ['gas2',24.1721,120.6605,"台中市西屯區文心路三段187號"],
+      ['gas3',24.1636,120.6507,"台中市西屯區文心路三段2號"],
+      ['gas4',24.1802,120.6344,"台中市西屯區環中路二段1286號"]
+    ];
+
+      function initMap(){
+          map=new google.maps.Map(document.getElementById('map'),{
+          center:{lat:24.1791,lng:120.6467},zoom:16});
+          setMarkers(map);
+      }
+      function setMarkers(map){
+        var image1={
+          url:'postmail.png'
+
+          //size: new google.maps.Size(47,32)
+          // The origin for this image is (0, 0).
+          //origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+        //anchor: new google.maps.Point(20, 32)
+        };
+        var image2={
+          url:"gas.png"
+        };
+        var shape = {
+          coords: [1, 1, 1, 20, 18, 20, 18, 1],
+          type: 'poly'
+        };
+        var marker;
+        //var infowindow = new google.maps.InfoWindow();
+        for (var i = 0; i < posts.length; i++) {
+          var post= posts[i];
+           marker=new google.maps.Marker({
+            position: {lat: post[1], lng: post[2]},
+            map: map,
+            icon: image1,
+            shape: shape,
+            title: post[0],
+          });
+          attachSecretMessage(marker, i);
+      }
+
+      for (var i = 0; i < gaslocs.length; i++) {
+        var gasloc= gaslocs[i];
+         marker=new google.maps.Marker({
+          position: {lat: gasloc[1], lng: gasloc[2]},
+          map: map,
+          icon: image2,
+          shape: shape,
+          title: gasloc[0],
+        });
+        attachSecretMessageGas(marker, i);
+    }
+
+    }
+
+
+    function attachSecretMessage(marker, number) {
+      var message = ["台中市西屯區河南路2段268號","台中市西屯區文心路三段187號","台中市西屯區青海路一段83號"];
+      var infowindow = new google.maps.InfoWindow(
+          { content: message[number],
+            size: new google.maps.Size(50,50)
+          });
+      google.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.open(map,marker);
+      });
+    }
+
+    function attachSecretMessageGas(marker, number) {
+      var message = ["台中市西屯區河南路二段341號","台中市西屯區黎明路三段130號","台中市西屯區文心路三段2號","台中市西屯區環中路二段1286號"];
+      var infowindow = new google.maps.InfoWindow(
+          { content: message[number],
+            size: new google.maps.Size(50,50)
+          });
+      google.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.open(map,marker);
+      });
+    }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyvvO2mOVSmoP5A_1Abm_xc-LzoAp8CCA&callback=initMap"async defer>
+    </script>
+  </body>
+</html>
